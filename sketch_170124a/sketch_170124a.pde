@@ -5,7 +5,7 @@ ArrayList<ParticleSystem> systems;
 Repeller repeller;
 
 void setup() {
-  size(1600,900,P2D);
+  size(1600,900,P3D);
   frameRate(60);
   img=loadImage("particleTexture.png");
   systems = new ArrayList<ParticleSystem>();
