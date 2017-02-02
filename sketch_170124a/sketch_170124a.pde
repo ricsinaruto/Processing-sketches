@@ -19,7 +19,7 @@ void mousePressed() {
  float noiset=0;
 void draw() {
   blendMode(ADD);
-  background(30);
+  background(0);
   /*for (int i=0;i<15;i++) {
     particles.add(new Particle(new PVector(mouseX,mouseY),
     (int)map(noise(noiset),0,1,0,255),(int)map(noise(noiset+10000),0,1,0,255),(int)map(noise(noiset+100000),0,1,0,255)));
@@ -37,7 +37,7 @@ void draw() {
     noiset+=0.005;
   }
   
-  //repeller.display();
+  repeller.update(width/2,height/2);
 
   surface.setTitle(int(frameRate) + " fps");
 }
@@ -50,6 +50,10 @@ class Repeller {
   Repeller(float x, float y)  {
     location = new PVector(x,y);
   }
+ 
+ void update(int locx, int locy){
+   location=new PVector(locx,locy);
+ }
  
   void display() {
     stroke(255);
@@ -74,7 +78,7 @@ class ParticleSystem {
  
   PVector origin;
   int r,g,b;
-  int particleNumber=20;
+  int particleNumber=10;
   
   ParticleSystem(PVector location, int rr, int gg, int bb) {
     r=rr;
@@ -137,7 +141,7 @@ class Confetti extends Particle {
     pushMatrix();
     translate(location.x,location.y);
     rotate(theta);
-    image(img,0,0);
+    image(img,0,0,200,200);
     popMatrix();
   }
 }
@@ -180,7 +184,7 @@ class Particle {
     location.add(velocity);
     acceleration.mult(0);
 
-    lifespan -= 1;
+    lifespan -= 0.7;
   }
  
   void display() {
