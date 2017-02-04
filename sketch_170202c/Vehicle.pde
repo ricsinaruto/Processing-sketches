@@ -67,6 +67,22 @@ class Vehicle {
     
   }
   
+  PVector getNormalPoint(PVector p, PVector a, PVector b) {
+//PVector that points from a to p
+    PVector ap = PVector.sub(p, a);
+//PVector that points from a to b
+    PVector ab = PVector.sub(b, a);
+ 
+//Using the dot product for scalar projection
+    ab.normalize();
+    ab.mult(ap.dot(ab));
+//Finding the normal point along the line segment
+    PVector normalPoint = PVector.add(a, ab);
+ 
+    return normalPoint;
+  }
+  
+  //following flowfield lines
   void follow (FlowField flow) {
     PVector desired=flow.lookup(location);
     desired.mult(maxspeed);
@@ -74,6 +90,40 @@ class Vehicle {
     PVector steer = PVector.sub(desired,velocity);
     steer.limit(maxforce);
     applyForce(steer);
+    alfa=255;
+  }
+  
+  //following a path
+  void followPath(Path p) {
+ 
+//Step 1: Predict the vehicle’s future location.
+    PVector predict = velocity.get();
+    predict.normalize();
+    predict.mult(25);
+    PVector predictLoc = PVector.add(location, predict);
+ 
+ PVector target = null;
+//Start with a very high record that can easily be beaten.
+float worldRecord = 1000000;
+//Step 2: Find the normal point along the path.
+    for (int i = 0; i < p.points.size()-1; i++) {
+  PVector a = p.points.get(i);
+  PVector b = p.points.get(i+1);
+//Finding the normals for each line segment
+  PVector normalPoint = getNormalPoint(predictLoc, a, b);
+    if (normalPoint.x < a.x || normalPoint.x > b.x) {
+//Use the end point of the segment as our normal point if we can’t find one.
+      normalPoint = b.get();
+   }
+   float distance = PVector.dist(predictLoc, normalPoint);
+ 
+//If we beat the record, then this should be our target!
+  if (distance < worldRecord) {
+    worldRecord = distance;
+    target = normalPoint.get();
+  }
+    }
+ seek(target,true);
     alfa=255;
   }
   
