@@ -10,7 +10,7 @@ class Path {
  
   Path() {
 //Picking some arbitrary values to initialize the path
-    radius = 50;
+    radius = 20;
     points = new ArrayList<PVector>();
   }
   
@@ -20,12 +20,26 @@ class Path {
   }
  
   void display() {  // Display the path.
-     stroke(0);
+    strokeJoin(ROUND);
+    
+    //Draw thick line for radius
+    stroke(175);
+    strokeWeight(radius*2);
     noFill();
     beginShape();
     for (PVector v : points) {
       vertex(v.x,v.y);
     }
-    endShape();
+    endShape(CLOSE);
+    
+    //Draw thin line for center of path
+    stroke(0);
+    strokeWeight(1);
+    noFill();
+    beginShape();
+    for (PVector v : points) {
+      vertex(v.x, v.y);
+    }
+    endShape(CLOSE);
   }
 }

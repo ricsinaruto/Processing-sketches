@@ -8,15 +8,19 @@ void setup() {
   frameRate(60);
   vehicles=new ArrayList<Vehicle>();
   
-  for (int i=0;i<1000;i++) {
+  for (int i=0;i<20;i++) {
     Vehicle p =new Vehicle(random(width),random(height));
     vehicles.add(p);
   }
   path=new Path();
-  for (int i=0;i<10;i++) {
-    if (i%2==0) path.addPoint(i*100,height/2+200);
-    if (i%2==1) path.addPoint(i*100,height/2-200);
-  }
+  
+   path.addPoint(200,height/2+50);
+   path.addPoint(400,height/2+50);
+   path.addPoint(600,height/2-50);
+   path.addPoint(400,height/2-100);
+   path.addPoint(200,height/2-30);
+   path.addPoint(200,height/2+50);
+  
 }
 
 /*void mousePressed() {
@@ -26,24 +30,22 @@ void setup() {
 
 
 void draw() {
-  background(0);
+  background(130);
   
+  path.display();
   if (mousePressed) {
   Vehicle p =new Vehicle(mouseX,mouseY);
   vehicles.add(p);
 }
   
-  for (Vehicle b: vehicles) {
-    b.followPath(path);
-    
-   /* for (int i=0;i<5;i++) {
-      b.seek(new PVector(random(width),random(height)),false);
-    }*/
-    b.update();
-    b.display();
+  for (Vehicle v: vehicles) {
+    // Path following and separation are worked on in this function
+    v.ApplyBehaviors(vehicles,path);
+    // Call the generic run method (update, borders, display, etc.)
+    v.run();
   }
   
-   path.display();
+   
   
    surface.setTitle(int(frameRate) + " fps");
 }
