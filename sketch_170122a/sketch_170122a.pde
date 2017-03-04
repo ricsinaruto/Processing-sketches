@@ -112,7 +112,7 @@ PVector attract(Mover m) {
   }
 }
 
-Mover[] movers =new Mover[280];
+Mover[] movers =new Mover[20];
 
 class Attractor {
   float mass;

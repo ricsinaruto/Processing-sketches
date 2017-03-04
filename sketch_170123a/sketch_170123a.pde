@@ -97,12 +97,12 @@ PVector attract(Mover m) {
   }
 }
 
-Mover[] movers =new Mover[280];
+Mover[] movers =new Mover[25];
 
 
 
 void setup() {
-  size(1920,1080,P2D);
+  size(1600,900,P2D);
   background(0);
   
   //frameRate(1000);
