@@ -8,16 +8,17 @@ class Vehicle {
   float maxforce;
   float alfa;
   int re,bl,gr;
+  float neighbordistance=30;
   
   Vehicle(float x, float y) {
     acceleration = new PVector(0,0);
     velocity = new PVector(0,0);
     location = new PVector(x,y);
-    r = 10.0;
+    r = 7.0;
     
 //Arbitrary values for maxspeed and force; try varying these!
     maxspeed = 5;
-    maxforce = 1;
+    maxforce = 0.1;
     re=(int)random(255);
     bl=(int)random(255);
     gr=(int)random(255);
@@ -32,7 +33,7 @@ class Vehicle {
     PVector m = seek(new PVector(mouseX,mouseY),true);
     // Arbitrary weighting
     f.mult(3);
-    s.mult(2);
+    s.mult(10);
     m.mult(1.4);
     // Accumulate in acceleration
     //applyForce(f);
@@ -40,7 +41,8 @@ class Vehicle {
     applyForce(m);
   }
   
-  void run() {
+  void run(ArrayList<Vehicle> vehicles) {
+    flock(vehicles);
     update();
     display();
   }
@@ -49,15 +51,78 @@ class Vehicle {
     velocity.add(acceleration);
     velocity.limit(maxspeed);
     location.add(velocity);
+    if (location.x>width) location.x=0;
+    if (location.x<0)      location.x=width;
+    if (location.y>height) location.y=0;
+    if (location.y<0)      location.y=height;
     acceleration.mult(0);
   }
   
   void applyForce(PVector force) {
     acceleration.add(force);
   }
+  
+  //flocking behaviour
+  void flock(ArrayList<Vehicle> vehicles) {
+    PVector sep=separate(vehicles);
+    PVector ali=align(vehicles);
+    PVector coh = cohesion(vehicles);
+    
+    sep.mult(1.7);
+    ali.mult(2);
+    coh.mult(1.2);
+    
+    applyForce(sep);
+    applyForce(ali);
+    applyForce(coh);
+    
+  }
+ 
+  PVector align(ArrayList<Vehicle> vehicles) {
+    float neighbordist=neighbordistance;
+    PVector sum=new PVector(0,0);
+    int count=0;
+   for (Vehicle other: vehicles) {
+     float d=PVector.dist(location,other.location);
+     if (d>0 && d<neighbordist) {
+       sum.add(other.velocity);
+       count++;
+     }
+   }
+   
+   if (count>0) {
+     sum.div(count);
+     sum.normalize();
+     sum.mult(maxspeed);
+     PVector steer =PVector.sub(sum,velocity);
+     steer.limit(maxforce);
+     return steer;
+   }
+   else return new PVector(0,0);
+  }
+  
+  PVector cohesion(ArrayList<Vehicle> vehicles) {
+    float neighbordist=neighbordistance;
+    PVector sum=new PVector(0,0);
+    int count=0;
+   for (Vehicle other: vehicles) {
+     float d=PVector.dist(location,other.location);
+     if (d>0 && d<neighbordist) {
+       sum.add(other.location);
+       count++;
+     }
+   }
+   
+   if (count>0) {
+     sum.div(count);
+     return seek(sum,true);
+   }
+   else return new PVector(0,0);
+  }
+  
  
   PVector separate(ArrayList boids) {
-    float distance=r*2;
+    float distance=neighbordistance;
     PVector steer = new PVector(0, 0, 0);
     int count=0;
     
@@ -117,9 +182,6 @@ class Vehicle {
     
     if (seek) return steer;
     else return steer1;
-   
-    
-    
   }
   
   PVector getNormalPoint(PVector p, PVector a, PVector b) {

@@ -2,15 +2,17 @@ import java.util.*;
 
 ArrayList<Vehicle> vehicles;
 Path path;
+Flock flock;
 
 void setup() {
-  size(1600,900,P2D);
+  size(1920,1080,P2D);
   frameRate(60);
   vehicles=new ArrayList<Vehicle>();
+  flock=new Flock();
   
-  for (int i=0;i<20;i++) {
+  for (int i=0;i<500;i++) {
     Vehicle p =new Vehicle(random(width),random(height));
-    vehicles.add(p);
+    flock.addBoid(p);
   }
   path=new Path();
   
@@ -38,12 +40,7 @@ void draw() {
   vehicles.add(p);
 }
   
-  for (Vehicle v: vehicles) {
-    // Path following and separation are worked on in this function
-    v.ApplyBehaviors(vehicles,path);
-    // Call the generic run method (update, borders, display, etc.)
-    v.run();
-  }
+ flock.run();
   
    
   
