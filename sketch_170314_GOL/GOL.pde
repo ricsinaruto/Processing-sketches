@@ -1,6 +1,6 @@
 class GOL {
 
-  int w = 2;
+  int w = 10;
   int columns, rows;
 
   // Game of life board
