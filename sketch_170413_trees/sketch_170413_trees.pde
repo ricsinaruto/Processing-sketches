@@ -1,7 +1,7 @@
 float time=0;
 float theta;
 void setup() {
-  size(1920, 1080,P2D);
+  size(1800, 900,P2D);
   //newTree();
   frameRate(60);
 }

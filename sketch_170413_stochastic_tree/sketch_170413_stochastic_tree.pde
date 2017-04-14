@@ -8,7 +8,7 @@ int seed = 5;
 
 
 void setup() {
-  size(1920, 1080,P2D);
+  size(1800, 900,P2D);
   smooth();
   frameRate(60);
 }
@@ -40,6 +40,10 @@ void branch(float h, float xoff) {
   // thickness of the branch is mapped to its length
   float sw = map(h, 2, 100, 1, 5);
   strokeWeight(sw);
+  float r = map(noise(xoff+sw, 10*yoff+100), 0, 1, 0, 255);
+  float g = map(noise(xoff+sw+5, 10*yoff+1000), 0, 1, 0, 255);
+  float b = map(noise(xoff+sw+10, 10*yoff+10000), 0, 1, 0, 255);
+  stroke(r,g,b);
   // Draw the branch
   line(0, 0, 0, -h);
   // Move along to end
@@ -55,7 +59,10 @@ void branch(float h, float xoff) {
     // Random number of branches
     int n = int(random(1, 5));
     for (int i = 0; i < n; i++) {
-      
+      r = map(noise(xoff, 10*yoff+0.001), 0, 1, 0, 255);
+      g = map(noise(xoff, 10*yoff+0.002), 0, 1, 0, 255);
+      b = map(noise(xoff, 10*yoff+0.003), 0, 1, 0, 255);
+      stroke(r,g,b);
       // Here the angle is controlled by perlin noise
       // This is a totally arbitrary way to do it, try others!
       float theta = map(noise(xoff+i, yoff), 0, 1, -PI/3, PI/3);
