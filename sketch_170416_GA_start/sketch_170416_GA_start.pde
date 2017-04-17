@@ -1,15 +1,16 @@
-float mutationRate = 0.001;    // Mutation rate
-int totalPopulation = 1000;      // Total Population
+float mutationRate = 0.002;    // Mutation rate
+int totalPopulation = 10000;      // Total Population
 
 DNA[] population;             // Array to hold the current population
 ArrayList<DNA> matingPool;    // ArrayList which we will use for our "mating pool"
 String target;                // Target phrase
+int generation=0;
 
 PFont f;
 
 void setup() {
   size(800, 200);
-  target = "ceau bogdan ce mai faci";
+  target = "long text right here what you gonna do about it brah";
 
   population = new DNA[totalPopulation];
 
@@ -17,10 +18,11 @@ void setup() {
     population[i] = new DNA(target.length());
   }
   
-  f = createFont("Courier",12,true);
+  f = createFont("Courier",20,true);
 }
 
 void draw() {
+  generation++;
   for (int i = 0; i < population.length; i++) {
     population[i].calcFitness(target);
   }
@@ -55,9 +57,13 @@ void draw() {
       tmp=population[i].getPhrase();
     }
   }
-  everything+=tmp+"    ";
-  textFont(f,12);
+  everything=tmp;
+  textFont(f,20);
   text(everything,10,10,width,height);
+  String generation_string="Generation: "+generation;
+  String fitnessScore="Best Fitness: "+best_fitness;
+  text(generation_string,10,40,width,height);
+  text(fitnessScore,10,70,width,height);
 
   
 }
