@@ -1,21 +1,34 @@
+// DNA is an array of vectors
+
 class DNA {
+
+  // The genetic sequence
   PVector[] genes;
-  float maxforce=0.1;
-  
+
+  // The maximum strength of the forces
+  float maxforce = 0.1;
+
+  // Constructor (makes a DNA of random PVectors)
   DNA() {
-    genes=new PVector[lifetime];
-    for (int i=0;i<genes.length;i++) {
-      float angle=random(TWO_PI);
-      genes[i] = PVector.random2D();
-      genes[i].mult(random(0,maxforce));
+    genes = new PVector[lifetime];
+    for (int i = 0; i < genes.length; i++) {
+      float angle = random(TWO_PI);
+      genes[i] = new PVector(cos(angle), sin(angle));
+      genes[i].mult(random(0, maxforce));
     }
+
+    // Let's give each Rocket an extra boost of strength for its first frame
+    genes[0].normalize();
   }
-  
-  //Constructor #2, creates the instance based on an existing array
+
+  // Constructor #2, creates the instance based on an existing array
   DNA(PVector[] newgenes) {
-    genes=newgenes;
+    // We could make a copy if necessary
+    // genes = (PVector []) newgenes.clone();
+    genes = newgenes;
   }
-   // CROSSOVER
+
+  // CROSSOVER
   // Creates new DNA sequence from two (this & and a partner)
   DNA crossover(DNA partner) {
     PVector[] child = new PVector[genes.length];
@@ -29,7 +42,7 @@ class DNA {
     DNA newgenes = new DNA(child);
     return newgenes;
   }
-  
+
   // Based on a mutation probability, picks a new random Vector
   void mutate(float m) {
     for (int i = 0; i < genes.length; i++) {
@@ -37,8 +50,12 @@ class DNA {
         float angle = random(TWO_PI);
         genes[i] = new PVector(cos(angle), sin(angle));
         genes[i].mult(random(0, maxforce));
+        //        float angle = random(-0.1,0.1);
+        //        genes[i].rotate(angle);
+        //        float factor = random(0.9,1.1);
+        //        genes[i].mult(factor);
+        if (i ==0) genes[i].normalize();
       }
     }
   }
 }
-  

@@ -1,3 +1,5 @@
+// A class to describe a population of "creatures"
+
 class Population {
 
   float mutationRate;          // Mutation rate
@@ -14,15 +16,25 @@ class Population {
     //make a new set of creatures
     for (int i = 0; i < population.length; i++) {
       PVector position = new PVector(width/2,height+20);
-      population[i] = new Rocket(position, new DNA());
+      population[i] = new Rocket(position, new DNA(),population.length);
     }
   }
 
-  void live () {
-    // Run every rocket
+  void live (ArrayList<Obstacle> os) {
+    // For every creature
     for (int i = 0; i < population.length; i++) {
-      population[i].run();
+      // If it finishes, mark it down as done!
+      population[i].checkTarget();
+      population[i].run(os);
     }
+  }
+
+  // Did anything finish?
+  boolean targetReached() {
+    for (int i = 0; i < population.length; i++) {
+      if (population[i].hitTarget) return true;
+    }
+    return false;
   }
 
   // Calculate fitness for each creature
@@ -72,7 +84,7 @@ class Population {
       child.mutate(mutationRate);
       // Fill the new population with the new child
       PVector position = new PVector(width/2,height+20);
-      population[i] = new Rocket(position, child);
+      population[i] = new Rocket(position, child,population.length);
     }
     generations++;
   }
