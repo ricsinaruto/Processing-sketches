@@ -1,4 +1,4 @@
-float mutationRate = 0.002;    // Mutation rate
+float mutationRate = 0.0002;    // Mutation rate
 int totalPopulation = 10000;      // Total Population
 
 DNA[] population;             // Array to hold the current population
@@ -26,6 +26,15 @@ void draw() {
   for (int i = 0; i < population.length; i++) {
     population[i].calcFitness(target);
   }
+  
+  float best_fitness=1000;
+  String tmp="";
+  for (int i = 0; i < population.length; i++) {
+    if (population[i].fitness<best_fitness) {
+      best_fitness=population[i].fitness;
+      tmp=population[i].getPhrase();
+    }
+  }
 
   ArrayList<DNA> matingPool = new ArrayList<DNA>();  // ArrayList which we will use for our "mating pool"
 
@@ -49,14 +58,8 @@ void draw() {
   background(255);
   fill(0);
   String everything = "";
-  String tmp="";
-  float best_fitness=1000;
-  for (int i = 0; i < population.length; i++) {
-    if (population[i].fitness<best_fitness) {
-      best_fitness=population[i].fitness;
-      tmp=population[i].getPhrase();
-    }
-  }
+  
+  
   everything=tmp;
   textFont(f,20);
   text(everything,10,10,width,height);
